@@ -1,86 +1,62 @@
-#unfinished
+#Filter according to day and airport (one file per pair)
 #----------------------
-#Usage: modify path and files list, run python filter.py
-#files should NOT include extension
+#Usage: modify path and file, run python filter.py
+#Files should NOT include extension
+
 #constants
 path = "../data/"
-files = ["2015-01"]
+file = "2015-01"
 
-days = []
-airports = []
+days = ["01"]
+airports = ["12478"]
 
 #==================
 
 import os
 import csv
-import numpy
 
-zero = 0
-pos = numpy.zeros(11)
-neg = numpy.zeros(11)
-total = 0.0
+def process(baseFile):
+    readers = {}
+    newpath = os.path.join(path, file)
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
 
-def stat(reader):
-    global zero
-    global pos
-    global neg
-    global total
-    for row in reader:
-        if float(row[10]) > 0:
-            continue
-        diff = float(row[6])
-        total += 1
-        if diff == 0:
-            zero += 1
-        elif diff > 100:
-            pos[10] += 1
-        elif diff < -100:
-            neg[10] += 1
-        else:
-            if diff > 0:
-                pos[int(diff)/10] += 1
-            else:
-                neg[int(-diff)/10] += 1
-for index, file in enumerate(files, start=1):
-    print "{}: {}/{}".format("processing file", index, len(files))
-    with open(os.path.join(path, file + '.csv'), 'rb') as csvfile:
-        spamreader = csv.reader(csvfile)
-        stat(spamreader)
+    for day in days:
+        for airport in airports:
+            key = day + "-" + airport
+            filename = os.path.join(newpath, key + ".csv")
+            readers[key] = open(filename, "w")
 
-print "----------"
-print "{}: {}".format("nodelay", zero)
-print "{}: {}".format("pos", pos)
-print "{}: {}".format("neg", neg)
+    with open(os.path.join(path, baseFile + '.csv'), 'rb') as csvfile:
+        baseReader = csv.reader(csvfile)
+        for row in baseReader:
+            day = row[0][-2:]
+            departure = row[2]
+            arrival = row[3]
+            if day + "-" + departure in readers:
+                try:
+                    flnum = row[1]
+                    doa = 0
+                    crstime = row[4]
+                    realtime = row[5]
+                    delay = row[6]
+                    writer = csv.writer(readers[day + "-" + departure])
+                    writer.writerow([flnum,doa,crstime,realtime,delay])
+                except Exception, e:
+                    pass
+            if day + "-" + arrival in readers:
+                try:
+                    flnum = row[1]
+                    doa = 1
+                    crstime = row[7]
+                    realtime = row[8]
+                    delay = row[9]
+                    writer = csv.writer(readers[day + "-" + arrival])
+                    writer.writerow([flnum,doa,crstime,realtime,delay])
+                except Exception, e:
+                    pass
 
-print "----------"
-print "{}: {}".format("total", total)
-print "stats:"
-rneg = range(-10, 1)
-rpos = range(1, 11)
+    for key, reader in readers.items():
+        reader.close()
 
-def percent(x): 
-    if x == 0:
-        return "-"
-    else:
-        return "{0:.3f}".format(x/total)
-
-formalNeg = list(reversed(neg))
-statsNeg = map(percent, formalNeg)
-statsPos = map(percent, pos)
-print "<-10" +  '\t' + '\t'.join(str(v) for v in rneg)
-print '\t'.join(statsNeg) + '\t' + "{0:.3f}".format(zero/total)
-print '\t'.join(str(v) for v in rpos) + '\t' + ">10"
-print '\t'.join(statsPos)
-
-with open(os.path.join(path, "lastres.txt"), "w") as text_file:
-    text_file.write("{}: {}".format("nodelay", zero) + '\n')
-    text_file.write("{}: {}".format("pos", pos) + '\n')
-    text_file.write("{}: {}".format("neg", neg) + '\n')
-    text_file.write("----------" + '\n')
-    text_file.write("{}: {}".format("total", total) + '\n')
-    text_file.write("stats:" + '\n')
-    text_file.write("<-10" +  '\t' + '\t'.join(str(v) for v in rneg) + '\n')
-    text_file.write('\t'.join(statsNeg) + '\t' + "{0:.3f}".format(zero/total) + '\n')
-    text_file.write('\t'.join(str(v) for v in rpos) + '\t' + ">10" + '\n')
-    text_file.write('\t'.join(statsPos))
-
+process(file)

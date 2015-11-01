@@ -1,6 +1,10 @@
+#Dependency: numpy
+#Calculate stats
+#----------------------
 #Usage: modify path and files list, run python stats.py
-#files should NOT include extension
-#constants
+#Files should NOT include extension
+
+#Constants
 path = "../data/"
 files = ["2015-01"]
 
@@ -15,27 +19,42 @@ pos = numpy.zeros(11)
 neg = numpy.zeros(11)
 total = 0.0
 
-def stat(reader):
+def record(diff):
     global zero
     global pos
     global neg
     global total
+    total += 1
+    if diff == 0:
+        zero += 1
+    elif diff > 100:
+        pos[10] += 1
+    elif diff < -100:
+        neg[10] += 1
+    else:
+        if diff > 0:
+            pos[int(diff)/10] += 1
+        else:
+            neg[int(-diff)/10] += 1
+
+def stat(reader):
     for row in reader:
         if float(row[10]) > 0:
             continue
-        diff = float(row[6])
-        total += 1
-        if diff == 0:
-            zero += 1
-        elif diff > 100:
-            pos[10] += 1
-        elif diff < -100:
-            neg[10] += 1
-        else:
-            if diff > 0:
-                pos[int(diff)/10] += 1
-            else:
-                neg[int(-diff)/10] += 1
+
+        try:
+            diff = float(row[6])
+            record(diff)
+        except Exception, e:
+            pass
+
+        try:
+            diff = float(row[9])
+            record(diff)
+        except Exception, e:
+            pass
+        
+
 for index, file in enumerate(files, start=1):
     print "{}: {}/{}".format("processing file", index, len(files))
     with open(os.path.join(path, file + '.csv'), 'rb') as csvfile:
