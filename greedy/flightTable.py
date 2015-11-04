@@ -16,10 +16,19 @@ class FlightTable:
 		self.gates.append([flight])
 
 	def gateWithLatestEnding(self):
-		latest = 0
+		latest = -1
 		latestTime = FTime(0, 0)
 		for index, gate in enumerate(self.gates):
 			if gate[-1].endTime > latestTime:
+				latestTime = gate[-1].endTime
+				latest = index
+		return (latest, latestTime)
+
+	def latestAvailableGateForFlight(self, flight):
+		latest = -1
+		latestTime = FTime(0, 0)
+		for index, gate in enumerate(self.gates):
+			if gate[-1].endTime > latestTime and gate[-1].endTime < flight.startTime:
 				latestTime = gate[-1].endTime
 				latest = index
 		return (latest, latestTime)

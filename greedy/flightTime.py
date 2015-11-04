@@ -1,7 +1,7 @@
 class FTime:
 	def __init__(self, arg1, arg2 = None):
 		if arg2 is None and type(arg1) is str:
-			time = divmod(int(str), 100)
+			time = divmod(int(arg1), 100)
 			self.hours = time[0]
 			self.mins = time[1]
 		else: 
@@ -16,8 +16,7 @@ class FTime:
 		return str(self.hours * 100 + self.mins)
 
 	def minus(self, time2):
-		time2 = divmod(int(time2), 100)
-		return (self.selfhours - time2[0]) * 60 + self.mins - time2[1]
+		return (self.hours - time2.hours) * 60 + self.mins - time2.mins
 
 	def delay(self, diff):
 		newTime = timeAfterDelay(diff)
@@ -36,7 +35,7 @@ class FTime:
 	def __cmp__(self, obj):
 		if not isinstance(obj, FTime):
 			return -1
-		
+
 		res = self.minus(obj)
 		if res < 0:
 			return -1
