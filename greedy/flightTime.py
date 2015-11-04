@@ -6,8 +6,8 @@ class FTime:
 			self.mins = time[1]
 		else: 
 			try:
-				hours = int(arg1)
-				mins = int(arg2)
+				self.hours = int(arg1)
+				self.mins = int(arg2)
 			except Exception, e:
 				print e
 				raise

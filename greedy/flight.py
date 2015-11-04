@@ -15,4 +15,4 @@ class Flight:
 			self.endTime = self.crsTime.timeAfterDelay(45)
 
 	def cmpEndTime(self, flight2):
-		res = cmp(self.endTime, flight2.endTime)
+		return cmp(self.endTime, flight2.endTime)

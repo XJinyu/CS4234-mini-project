@@ -10,7 +10,7 @@ class FlightTable:
 
 	def assign(self, flight, gateNum):
 		self.gates[gateNum].append(flight)
-		self.gates.sort(lambda x, y: x.cmpEndTime(y))
+		self.gates[gateNum].sort(lambda x, y: x.cmpEndTime(y))
 
 	def assignToNewGate(self, flight):
 		self.gates.append([flight])
