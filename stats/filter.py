@@ -35,22 +35,22 @@ def process(baseFile):
             arrival = row[3]
             if day + "-" + departure in readers:
                 try:
-                    flnum = row[1]
+                    flnum = str(int(row[1]))
                     doa = 0
-                    crstime = row[4]
-                    realtime = row[5]
-                    delay = row[6]
+                    crstime = str(int(row[4])).zfill(4)
+                    realtime = str(int(row[5])).zfill(4)
+                    delay = str(float(row[6]))
                     writer = csv.writer(readers[day + "-" + departure])
                     writer.writerow([flnum,doa,crstime,realtime,delay])
                 except Exception, e:
                     pass
             if day + "-" + arrival in readers:
                 try:
-                    flnum = row[1]
+                    flnum = str(int(row[1]))
                     doa = 1
-                    crstime = row[7]
-                    realtime = row[8]
-                    delay = row[9]
+                    crstime = str(int(row[7])).zfill(4)
+                    realtime = str(int(row[8])).zfill(4)
+                    delay = str(float(row[9]))
                     writer = csv.writer(readers[day + "-" + arrival])
                     writer.writerow([flnum,doa,crstime,realtime,delay])
                 except Exception, e:
