@@ -32,3 +32,17 @@ class FlightTable:
 				latestTime = gate[-1].endTime
 				latest = index
 		return (latest, latestTime)
+
+	def printGates(self):
+		print "Total gates: " + str(self.totalGates())
+		for index, gate in enumerate(self.gates):
+			flightNums = []
+			map(lambda flight: flightNums.append(flight.flNum), gate)
+			print "Gate " + str(index + 1) + ": " + ", ".join(flightNums)
+
+	def printGate(self, gateNum):
+		gateNum -= 1
+		print "Gate " + str(gateNum + 1) + "/" + str(len(self.gates))
+		for flight in self.gates[gateNum]:
+			print "Flight " + flight.flNum.zfill(5) + ": " + flight.startTime.toStr() + " to " + flight.endTime.toStr()
+

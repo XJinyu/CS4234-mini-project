@@ -40,5 +40,6 @@ inputFrom(path, file)
 
 greedyAllocate(flights, flightTable)
 
-print flightTable.totalGates()
+flightTable.printGates()
+flightTable.printGate(1)
 

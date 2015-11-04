@@ -13,7 +13,9 @@ class FTime:
 				raise
 
 	def toStr(self):
-		return str(self.hours * 100 + self.mins)
+		if self.hours < 0 or self.mins < 0:
+			return str(self.hours * 60 + self.mins).zfill(4)
+		return str(self.hours * 100 + self.mins).zfill(4)
 
 	def minus(self, time2):
 		return (self.hours - time2.hours) * 60 + self.mins - time2.mins
