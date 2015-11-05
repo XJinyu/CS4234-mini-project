@@ -16,6 +16,7 @@ import csv
 from flightTable import FlightTable
 from flight import Flight
 from flightTime import FTime
+import validate
 
 flights = []
 flightTable = FlightTable()
@@ -40,6 +41,7 @@ inputFrom(path, file)
 
 greedyAllocate(flights, flightTable)
 
-flightTable.printGates()
-flightTable.printGate(1)
+#flightTable.printGates()
+
+validate.validate(flightTable)
 

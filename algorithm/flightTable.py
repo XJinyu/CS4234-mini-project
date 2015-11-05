@@ -33,6 +33,13 @@ class FlightTable:
 				latest = index
 		return (latest, latestTime)
 
+	def validateGate(self, gateNum):
+		gate = self.gates[gateNum]
+		for index in range(len(gate) - 1):
+			if gate[index].endTime > gate[index + 1].startTime:
+				return False
+		return True
+
 	def printGates(self):
 		print "Total gates: " + str(self.totalGates())
 		for index, gate in enumerate(self.gates):
