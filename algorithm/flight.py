@@ -3,13 +3,13 @@ from flightTime import FTime
 class Flight:
 	def __init__(self, flNum, doa, crs, real):
 		self.flNum = flNum
-		self.isArrival = (int(doa) == 0)
+		self.isArrival = (int(doa) == 1)
 		self.crsTime = FTime(crs)
 		self.realTime = FTime(real)
 		self.delay = self.realTime.minus(self.crsTime)
 		if not self.isArrival: 	#dep
 			self.startTime = self.crsTime.timeAfterDelay(-90)
-			self.endTime = self.crsTime
+			self.endTime = self.crsTime.timeAfterDelay(10)
 		else: 	#arr
 			self.startTime = self.crsTime
 			self.endTime = self.crsTime.timeAfterDelay(45)

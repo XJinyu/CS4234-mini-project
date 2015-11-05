@@ -41,7 +41,7 @@ inputFrom(path, file)
 
 greedyAllocate(flights, flightTable)
 
-#flightTable.printGates()
+flightTable.printGates()
 
 validate.validate(flightTable)
 
