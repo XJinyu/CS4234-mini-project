@@ -7,16 +7,20 @@
 #constants
 path = "../data/2015-01/"
 file = "01-12478"
+minInterval = 0
 
 #==================
 import os
 import numpy as np
 import csv
 
-from flightTable import FlightTable
-from flight import Flight
-from flightTime import FTime
-import validate
+# folder as module
+__all__ = ['flight', 'flightTable', 'flightTime', 'validate']
+
+from modules.flightTable import FlightTable
+from modules.flight import Flight
+from modules.flightTime import FTime
+from modules.validate import *
 
 flights = []
 flightTable = FlightTable()
@@ -26,7 +30,7 @@ def inputFrom(path, file):
 		basic_reader = csv.reader(csvfile)
 		for row in basic_reader:
 			#fl_num,dep(0)/arr(1),crs_time,real_time, delay
-			flights.append(Flight(row[0], row[1], row[2], row[3])) 
+			flights.append(Flight(row[0], row[1], row[2], row[3], minInterval)) 
 	flights.sort(lambda x, y: x.cmpEndTime(y))
 		
 def greedyAllocate(flights, table):
@@ -41,7 +45,8 @@ inputFrom(path, file)
 
 greedyAllocate(flights, flightTable)
 
-flightTable.printGates()
+validate(flightTable, os.path.join(path, file+'.csv'))
 
-validate.validate(flightTable)
+# flightTable.printGate(1)
+
 

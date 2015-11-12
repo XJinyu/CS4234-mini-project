@@ -98,3 +98,10 @@ with open(os.path.join(path, "lastres.txt"), "w") as text_file:
     text_file.write('\t'.join(str(v) for v in rpos) + '\t' + ">10" + '\n')
     text_file.write('\t'.join(statsPos))
 
+with open(os.path.join(path, "stats.csv"), "w") as csvfile:
+    writer = csv.writer(csvfile)
+    result = []
+    result.extend(statsNeg)
+    result.append("{0:.3f}".format(zero/total))
+    result.extend(statsPos)
+    writer.writerow(result)

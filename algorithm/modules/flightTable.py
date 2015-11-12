@@ -40,6 +40,14 @@ class FlightTable:
 				return False
 		return True
 
+	def validateGateDelayed(self, gateNum):
+		gate = self.gates[gateNum]
+		count = 0
+		for index in range(len(gate) - 1):
+			if gate[index].delayedEndTime > gate[index + 1].delayedStartTime:
+				count += 1
+		return count
+
 	def printGates(self):
 		print "Total gates: " + str(self.totalGates())
 		for index, gate in enumerate(self.gates):
@@ -52,4 +60,4 @@ class FlightTable:
 		print "Gate " + str(gateNum + 1) + "/" + str(len(self.gates))
 		for flight in self.gates[gateNum]:
 			print "Flight " + flight.flNum.zfill(5) + ": " + flight.startTime.toStr() + " to " + flight.endTime.toStr()
-
+			print "Delayed: " + flight.delayedStartTime.toStr() + " to " + flight.delayedEndTime.toStr()
